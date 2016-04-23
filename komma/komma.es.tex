@@ -1,0 +1,681 @@
+\documentclass[spanish]{beamer}
+
+\usetheme{default}
+
+\usepackage{polyglossia}
+
+\setdefaultlanguage{spanish}
+
+\usepackage{fancyvrb}
+
+\DefineShortVerb{\|}
+\DefineVerbatimEnvironment{code}{Verbatim}{frame=lines}
+
+\title{Haskell práctico}
+\subtitle{Analizadores}
+\author{Juan Pedro Villa Isaza}
+\institute{Stack Builders}
+\date{\today}
+
+\logo{\includegraphics[scale=0.15]{../images/stackbuilders-logo.png}}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame{\titlepage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+  \frametitle{Haskell es...}
+
+  \begin{itemize}
+  \item
+    Funcional
+  \item
+    Puro
+  \item
+    \emph{Multipropósito}
+  \item
+    ...
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es funcional y puro}
+  \framesubtitle{Fibonacci}
+
+  \begin{code}
+fibonacci :: Integer -> Integer
+fibonacci 0 = 0
+fibonacci 1 = 1
+fibonacci n = fibonacci (n - 1) + fibonacci (n - 2)
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es funcional y puro}
+  \framesubtitle{Fibonacci}
+
+  \begin{code}
+> fibonacci 5
+5
+  \end{code}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es funcional y puro}
+  \framesubtitle{Fibonacci (C)}
+
+  \begin{code}
+int fibonacci(int n) {
+  if (n == 0)
+    return 0;
+  else if (n == 1)
+    return 1;
+  else
+    return fibonacci (n - 1) + fibonacci (n - 2);
+}
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es funcional y puro}
+  \framesubtitle{Fibonacci (C)}
+
+  \begin{code}
+int main() {
+  printf("%d\n", fibonacci(5));
+}
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es funcional y puro}
+  \framesubtitle{Fibonacci (C)}
+
+  Los diez primeros números de Fibonacci:
+  \begin{code}
+for (int i = 1; i <= 10; i++) {
+  printf("%d\n", fibonacci(i - 1));
+}
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es funcional y puro}
+  \framesubtitle{Fibonacci}
+
+  Los diez primeros números de Fibonacci:
+  \begin{code}
+> map fibonacci [0..9]
+[0,1,1,2,3,5,8,13,21,34]
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es funcional y puro}
+  \framesubtitle{Fibonacci}
+
+  Todos los números de Fibonacci:
+  \begin{code}
+> let fibonaccis = map fibonacci [0..]
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es funcional y puro}
+  \framesubtitle{Fibonacci}
+
+  Los diez primeros números de Fibonacci:
+  \begin{code}
+> take 10 fibonaccis
+[0,1,1,2,3,5,8,13,21,34]
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es funcional y puro}
+  \framesubtitle{Fibonacci (C)}
+
+  Los diez primeros números pares de Fibonacci:
+  \begin{code}
+for (int i = 1, j = 0; i <= 10; j++) {
+  if (fibonacci(j) % 2 == 0) {
+    printf("%d\n", fibonacci(j));
+    i = i + 1;
+  }
+}
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es funcional y puro}
+  \framesubtitle{Fibonacci}
+
+  Los diez primeros números pares de Fibonacci:
+  \begin{code}
+> take 10 (filter even fibonaccis)
+[0,2,8,34,144,610,2584,10946,46368,196418]
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es funcional y puro}
+  \framesubtitle{Fibonacci (C)}
+
+  La suma de los diez primeros números pares de Fibonacci:
+  \begin{code}
+int s = 0;
+for (int i = 1, j = 0; i <= 10; j++) {
+  if (fibonacci(j) % 2 == 0) {
+    s = s + fibonacci(j);
+    i = i + 1;
+  }
+}
+printf("%d\n", s);
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es funcional y puro}
+  \framesubtitle{Fibonacci}
+
+  La suma de los diez primeros números pares de Fibonacci:
+  \begin{code}
+> sum (take 10 (filter even fibonaccis))
+257114
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+  \frametitle{Haskell es multipropósito}
+  \framesubtitle{Analizadores (Nombres de usuario)}
+
+  \texttt{¡Hola, @\alert<2>{stackbuilders}! \#haskell \#cuenca}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es multipropósito}
+  \framesubtitle{Analizadores (megaparsec-4.4.0)}
+
+  \begin{code}
+import Text.Megaparsec
+import Text.Megaparsec.String (Parser)
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es multipropósito}
+  \framesubtitle{Analizadores (megaparsec-4.4.0)}
+
+  \begin{code}
+> parseTest (char '@') "@stackbuilders"
+'@'
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es multipropósito}
+  \framesubtitle{Analizadores (megaparsec-4.4.0)}
+
+  \begin{code}
+> parseTest (char '@') "#stackbuilders"
+1:1:
+unexpected '#'
+expecting '@'
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es multipropósito}
+  \framesubtitle{Analizadores (megaparsec-4.4.0)}
+
+  \begin{code}
+> parseTest (some alphaNumChar) ""
+1:1:
+unexpected end of input
+expecting alphanumeric character
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es multipropósito}
+  \framesubtitle{Analizadores (megaparsec-4.4.0)}
+
+  \begin{code}
+> parseTest (some alphaNumChar) "cuenca"
+"cuenca"
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es multipropósito}
+  \framesubtitle{Analizadores (megaparsec-4.4.0)}
+
+  \begin{code}
+> parseTest (many alphaNumChar) ""
+""
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es multipropósito}
+  \framesubtitle{Analizadores (megaparsec-4.4.0)}
+
+  \begin{code}
+> parseTest (many alphaNumChar) "cuenca"
+"cuenca"
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+  \frametitle{Haskell es multipropósito}
+  \framesubtitle{Analizadores (Nombres de usuario)}
+
+  \texttt{¡Hola, @\alert{stackbuilders}! \#haskell \#cuenca}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es multipropósito}
+  \framesubtitle{Analizadores (Nombres de usuario)}
+
+  \begin{code}
+username :: Parser String
+username = do
+  _ <- char '@'
+  some alphaNumChar
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es multipropósito}
+  \framesubtitle{Analizadores (Nombres de usuario)}
+
+  \begin{code}
+> parseTest username "@stackbuilders"
+"stackbuilders"
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es multipropósito}
+  \framesubtitle{Analizadores (Nombres de usuario)}
+
+  \begin{code}
+> parseTest username "¡Hola, @stackbuilders!"
+1:1:
+unexpected '¡'
+expecting '@'
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es multipropósito}
+  \framesubtitle{Analizadores (Nombres de usuario)}
+
+  \begin{code}
+usernames :: Parser [String]
+usernames = do
+  _ <- many (noneOf "@")
+  (:) <$> username <*> usernames <|> return []
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es multipropósito}
+  \framesubtitle{Analizadores (Nombres de usuario)}
+
+  \begin{code}
+> parseTest usernames "¡Hola, @stackbuilders!"
+["stackbuilders"]
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es multipropósito}
+  \framesubtitle{Analizadores (Nombres de usuario)}
+
+  \begin{code}
+> parseTest usernames "¡Hola, Stack Builders!"
+[]
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+  \frametitle{Haskell es multipropósito}
+  \framesubtitle{Analizadores (Etiquetas)}
+
+  \texttt{¡Hola, @stackbuilders! \#\alert<2>{haskell} \#\alert<2>{cuenca}}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es multipropósito}
+  \framesubtitle{Analizadores (Etiquetas)}
+
+  \begin{code}
+hashtag :: Parser String
+hashtag = do
+  _ <- char '#'
+  some alphaNumChar
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es multipropósito}
+  \framesubtitle{Analizadores (Etiquetas)}
+
+  \begin{code}
+> parseTest hashtag "#haskell"
+"haskell"
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es multipropósito}
+  \framesubtitle{Analizadores (Etiquetas)}
+
+  \begin{code}
+> parseTest hashtag "#haskell #cuenca"
+"haskell"
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es multipropósito}
+  \framesubtitle{Analizadores (Etiquetas)}
+
+  \begin{code}
+hashtags :: Parser [String]
+hashtags = do
+  _ <- many (noneOf "#")
+  (:) <$> hashtag <*> hashtags <|> return []
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es multipropósito}
+  \framesubtitle{Analizadores (Etiquetas)}
+
+  \begin{code}
+> parseTest hashtags "#haskell #cuenca"
+["haskell","cuenca"]
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+  \frametitle{Haskell es multipropósito}
+  \framesubtitle{Analizadores (CSV)}
+
+  \texttt{aaa,bbb,ccc}\\
+  \texttt{xxx,yyy,zzz}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es multipropósito}
+  \framesubtitle{Analizadores (CSV)}
+
+  RFC 4180:
+  \begin{code}
+file = record *(CRLF record) CRLF
+
+record = field *(COMMA field)
+
+field = *TEXTDATA
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es multipropósito}
+  \framesubtitle{Analizadores (CSV)}
+
+  \begin{code}
+field = *TEXTDATA
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es multipropósito}
+  \framesubtitle{Analizadores (CSV)}
+
+  \begin{code}
+field :: Parser String
+field = many (noneOf ",\n")
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es multipropósito}
+  \framesubtitle{Analizadores (CSV)}
+
+  \begin{code}
+> parseTest field "aaa"
+"aaa"
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es multipropósito}
+  \framesubtitle{Analizadores (CSV)}
+
+  \begin{code}
+> parseTest field "bbb"
+"bbb"
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es multipropósito}
+  \framesubtitle{Analizadores (CSV)}
+
+  \begin{code}
+> parseTest field "ccc"
+"ccc"
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es multipropósito}
+  \framesubtitle{Analizadores (CSV)}
+
+  \begin{code}
+record = field *(COMMA field)
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es multipropósito}
+  \framesubtitle{Analizadores (CSV)}
+
+  \begin{code}
+record :: Parser [String]
+record = sepBy field (char ',')
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es multipropósito}
+  \framesubtitle{Analizadores (CSV)}
+
+  \begin{code}
+> parseTest record "aaa,bbb,ccc"
+["aaa","bbb","ccc"]
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es multipropósito}
+  \framesubtitle{Analizadores (CSV)}
+
+  \begin{code}
+> parseTest record "xxx,yyy,zzz"
+["xxx","yyy","zzz"]
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es multipropósito}
+  \framesubtitle{Analizadores (CSV)}
+
+  \begin{code}
+file = record *(CRLF record) CRLF
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es multipropósito}
+  \framesubtitle{Analizadores (CSV)}
+
+  \begin{code}
+file :: Parser [[String]]
+file = endBy1 record eol
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es multipropósito}
+  \framesubtitle{Analizadores (CSV)}
+
+  \begin{code}
+> parseTest file "aaa,bbb,ccc\nxxx,yyy,zzz\n"
+[["aaa","bbb","ccc"],["xxx","yyy","zzz"]]
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es multipropósito}
+  \framesubtitle{Analizadores (CSV)}
+
+  \begin{code}
+file :: Parser [[String]]
+file = endBy1 record eol
+
+record :: Parser [String]
+record = sepBy field (char ',')
+
+field :: Parser String
+field = many (noneOf ",\n")
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+  \frametitle{Haskell es multipropósito}
+  \framesubtitle{Analizadores (CSV)}
+
+  \begin{code}
+file = record *(CRLF record) CRLF
+file = endBy1 record eol
+
+record = field *(COMMA field)
+record = sepBy field (char ',')
+
+field = *TEXTDATA
+field = many (noneOf ",\n")
+  \end{code}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
